@@ -26,7 +26,9 @@ const Part = (props) => {
   );
 };
 
-const Total = () => {};
+const Total = () => {
+  
+};
 
 const App = () => {
   const course = "Half Stack application development";
