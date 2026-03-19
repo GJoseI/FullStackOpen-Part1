@@ -1,45 +1,76 @@
-import { useState } from 'react'
+import { use, useState } from "react";
 
-const Display = (props) => {
-  return(
+const Title = (props) => {
+  return (
     <div>
       <h1>{props.text}</h1>
     </div>
-  )
-}
+  );
+};
 
 const Button = (props) => {
-  return (
-    <button onClick = {props.onClick}>{props.text}</button>
-  )
-}
+  return <button onClick={props.onClick}>{props.text}</button>;
+};
 
-const Stats = (props) => {
-  return(
+const Statistics = (props) => {
+  return (
     <div>
-      <p>{props.text} {props.number}</p>
+      {props.text} {props.number}
     </div>
-  )
-}
+  );
+};
 
 const App = () => {
   // save clicks of each button to its own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [positive, setPositive] = useState(0);
+  const [average, setAverage] = useState(0)
+
+  const handleGood = () => {
+    const updatedGood = good + 1;
+    const updatedTotal = updatedGood + neutral + bad;
+    setGood(updatedGood);
+    setTotal(updatedTotal);
+    setPositive((updatedGood / updatedTotal) * 100);
+    setAverage(updatedTotal / 3);
+  };
+
+  const handleBad = () => {
+    const updatedBad = bad + 1;
+    const updatedTotal = updatedBad + neutral + good;
+    setBad(updatedBad);
+    setTotal(updatedTotal);
+    setPositive((good / updatedTotal) * 100);
+    setAverage(updatedTotal / 3);
+  };
+
+  const handleNeutral = () => {
+    const updatedNeutral = neutral + 1;
+    const updatedTotal = updatedNeutral + good + bad;
+    setNeutral(updatedNeutral);
+    setTotal(updatedTotal);
+    setPositive((good / updatedTotal) * 100);
+    setAverage(updatedTotal / 3);
+  };
 
   return (
     <div>
-      <Display text="give feedback"/>
-      <Button onClick = {() => setGood(good + 1)} text = "good" />
-      <Button onClick = {() => setNeutral(neutral + 1)} text = "neutral" />
-      <Button onClick = {() => setBad(bad + 1)} text = "bad" />
-      <Display text="statistics"/>
-      <Stats text = "good" number = {good}/>
-      <Stats text = "neutral" number = {neutral}/>
-      <Stats text = "bad" number = {bad}/>
+      <Title text="give feedback" />
+      <Button onClick={handleGood} text="good" />
+      <Button onClick={handleNeutral} text="neutral" />
+      <Button onClick={handleBad} text="bad" />
+      <Title text="statistics" />
+      <Statistics text="good" number={good} />
+      <Statistics text="neutral" number={neutral} />
+      <Statistics text="bad" number={bad} />
+      <Statistics text="all" number={total} />
+      <Statistics text="average" number={average}/>
+      <Statistics text="positive" number={positive + "%"} />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
